@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>職場精神內耗情緒色譜測驗 | Plant Plant</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans TC & Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+        .serif-font {
+            font-family: 'Playfair Display', 'Noto Sans TC', serif;
+        }
+        .progress-bar {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .blur-bg {
+            backdrop-filter: blur(12px);
+        }
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: float-slow 6s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.4)); }
+            50% { filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.8)); }
+        }
+        .animate-glow {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <!-- 行動端主容器 -->
+    <div id="app-container" class="w-full max-w-md h-screen sm:h-[840px] bg-slate-950 sm:rounded-[40px] sm:shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col justify-between relative border border-slate-800/80">
+        
+        <!-- 背景炫光裝飾 -->
+        <div class="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-purple-900/20 blur-[100px] pointer-events-none"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-emerald-900/10 blur-[100px] pointer-events-none"></div>
+
+        <!-- ================= START SCREEN ================= -->
+        <div id="screen-welcome" class="flex-1 flex flex-col justify-between p-7 z-10">
+            <!-- Header -->
+            <div class="flex justify-between items-center pt-2">
+                <span class="text-[10px] font-bold tracking-[0.2em] text-purple-400 uppercase">Plant Plant Premium</span>
+                <span class="text-xs text-slate-500">辦公桌花藝美學</span>
+            </div>
+
+            <!-- 主視覺與標題 -->
+            <div class="my-auto text-center space-y-8">
+                <!-- 非洲紫羅蘭奢華 SVG 微距意象 -->
+                <div class="w-48 h-48 mx-auto relative animate-float">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-600/20 to-pink-500/20 rounded-full blur-2xl opacity-70 animate-pulse"></div>
+                    <svg viewBox="0 0 200 200" class="w-full h-full relative z-10">
+                        <defs>
+                            <!-- 漸變葉片 -->
+                            <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#064e3b" />
+                                <stop offset="100%" stop-color="#022c22" />
+                            </linearGradient>
+                            <!-- 絲絨花瓣深紫 -->
+                            <linearGradient id="petalPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#a855f7" />
+                                <stop offset="50%" stop-color="#6b21a8" />
+                                <stop offset="100%" stop-color="#4c1d95" />
+                            </linearGradient>
+                        </defs>
+                        <!-- 底層厚實葉片 -->
+                        <path d="M100,150 C70,150 40,120 40,90 C40,60 70,70 100,100 C130,70 160,60 160,90 C160,120 130,150 100,150 Z" fill="url(#leafGrad)" stroke="#0f766e" stroke-width="1.5" />
+                        <path d="M100,165 C115,165 140,145 150,125 C140,105 110,125 100,165 Z" fill="#065f46" opacity="0.8"/>
+                        <path d="M100,165 C85,165 60,145 50,125 C60,105 90,125 100,165 Z" fill="#065f46" opacity="0.8"/>
+                        
+                        <!-- 絨毛質感紋路線條 -->
+                        <path d="M45,95 Q70,95 100,102 M155,95 Q130,95 100,102" fill="none" stroke="#115e59" stroke-width="1" stroke-dasharray="2 2" />
+
+                        <!-- 紫羅蘭經典五瓣花 (天鵝絨質感) -->
+                        <g transform="translate(100,95) scale(1.1)">
+                            <!-- 花瓣 1 -->
+                            <path d="M0,0 C-15,-25 15,-25 0,0 Z" fill="url(#petalPurple)" />
+                            <!-- 花瓣 2 -->
+                            <path d="M0,0 C25,-15 25,15 0,0 Z" fill="url(#petalPurple)" />
+                            <!-- 花瓣 3 -->
+                            <path d="M0,0 C15,25 -15,25 0,0 Z" fill="url(#petalPurple)" />
+                            <!-- 花瓣 4 -->
+                            <path d="M0,0 C-25,15 -25,-15 0,0 Z" fill="url(#petalPurple)" />
+                            <!-- 花瓣 5 (重疊層次) -->
+                            <path d="M0,0 C-18,-18 -5,-28 0,0 Z" fill="#7e22ce" opacity="0.9" />
+                            <!-- 鮮黃色雄蕊 (花藥) -->
+                            <circle cx="1" cy="-2" r="4.5" fill="#eab308" filter="drop-shadow(0 0 3px #ca8a04)" />
+                            <circle cx="-2" cy="1" r="3.5" fill="#facc15" />
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="space-y-3">
+                    <h1 class="text-3xl font-black tracking-wide leading-tight text-white">
+                        你的職場精神內耗<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-amber-300 font-extrabold">是哪種顏色？</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 tracking-wider max-w-xs mx-auto leading-relaxed">
+                        非洲紫羅蘭色彩美學 • 壓力光譜診斷<br>探尋你內心深處的「心靈底色」與桌上花藝配對
+                    </p>
+                </div>
+            </div>
+
+            <!-- 開始按鈕 -->
+            <div class="pb-6 space-y-3">
+                <button id="btn-start" class="w-full bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-2xl shadow-[0_4px_20px_rgba(168,85,247,0.4)] transition-all duration-300 transform active:scale-95 text-sm tracking-widest">
+                    開始情緒色譜分析
+                </button>
+                <div class="flex justify-center items-center gap-2 text-[10px] text-slate-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 text-purple-500">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                    </svg>
+                    <span>分析結果將解鎖無孔自動吸水盆 65 折專屬加購權</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= QUIZ SCREEN ================= -->
+        <div id="screen-quiz" class="hidden flex-1 flex flex-col justify-between p-7 z-10">
+            <!-- Progress Bar -->
+            <div>
+                <div class="flex justify-between items-center text-[10px] tracking-wider text-slate-500 mb-2.5">
+                    <span id="quiz-progress-text">EMOTION PROFILE 1 / 5</span>
+                    <span class="font-bold text-purple-400" id="quiz-progress-percent">20%</span>
+                </div>
+                <div class="w-full h-[3px] bg-slate-900 rounded-full overflow-hidden">
+                    <div id="quiz-progress-bar" class="h-full bg-gradient-to-r from-purple-500 via-fuchsia-500 to-pink-500 progress-bar" style="width: 20%"></div>
+                </div>
+            </div>
+
+            <!-- Question Area -->
+            <div class="my-auto py-4">
+                <span class="text-xs font-bold text-purple-500 tracking-widest block mb-2" id="quiz-q-num">Q1.</span>
+                <h2 id="quiz-question" class="text-lg font-bold text-slate-100 leading-relaxed mb-6">
+                    最近最讓你感到心累的「辦公室雜音」是哪一種？
+                </h2>
+                
+                <!-- Options list -->
+                <div id="quiz-options" class="space-y-3">
+                    <!-- JS Dynamic Generation -->
+                </div>
+            </div>
+
+            <!-- Bottom Brand Stamp -->
+            <div class="pb-2 text-center text-[10px] text-slate-600 tracking-widest">
+                PLANT PLANT VIOLET PROJECT
+            </div>
+        </div>
+
+        <!-- ================= LOADING SCREEN ================= -->
+        <div id="screen-loading" class="hidden flex-1 flex flex-col justify-center items-center p-7 z-10 text-center">
+            <div class="w-28 h-28 relative mb-8">
+                <!-- 光圈旋轉 -->
+                <div class="absolute inset-0 rounded-full border-2 border-slate-900"></div>
+                <div class="absolute inset-0 rounded-full border-2 border-t-purple-500 border-r-pink-500 animate-spin"></div>
+                <!-- 呼吸微縮花瓣 -->
+                <div class="absolute inset-0 flex items-center justify-center text-purple-400 animate-pulse">
+                    <svg viewBox="0 0 100 100" class="w-12 h-12">
+                        <path d="M50,15 C58,35 68,35 76,50 C68,65 58,65 50,85 C42,65 32,65 24,50 C32,35 42,35 50,15 Z" fill="currentColor" opacity="0.8"/>
+                        <circle cx="50" cy="50" r="4" fill="#eab308" />
+                    </svg>
+                </div>
+            </div>
+            <h3 class="text-base font-bold text-slate-200 tracking-widest mb-2" id="loading-title">提取精神壓力頻譜...</h3>
+            <p class="text-xs text-slate-500 max-w-[240px] leading-relaxed" id="loading-sub">分析大腦中殘留的職場干擾因子，配對天鵝絨防護罩顏色</p>
+        </div>
+
+        <!-- ================= RESULT SCREEN ================= -->
+        <div id="screen-result" class="hidden flex-1 flex flex-col justify-between overflow-y-auto p-6 z-10">
+            
+            <!-- Result Identity Card -->
+            <div class="text-center pt-2">
+                <span class="text-[9px] font-bold tracking-[0.3em] text-purple-400 uppercase">Mental Spectrum Diagnosis</span>
+                <h3 class="text-xs text-slate-500 mt-0.5">你的職場精神內耗診斷報告</h3>
+            </div>
+
+            <!-- IG Share Style Card Preview -->
+            <div id="share-card" class="bg-gradient-to-b from-slate-900 to-slate-950 rounded-3xl p-5 border border-slate-800/80 my-4 shadow-2xl text-center relative overflow-hidden">
+                <!-- 水印背景 -->
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+                
+                <span id="res-color-badge" class="px-3 py-0.5 text-[10px] font-bold tracking-widest rounded-full">
+                    內耗色譜：暴躁紅 (Angry Red)
+                </span>
+                
+                <h1 id="res-title" class="text-2xl font-black text-slate-100 mt-3 mb-1 tracking-wide">
+                    焦躁暴雨中的「防禦屏障」
+                </h1>
+                <p id="res-subtitle" class="text-xs text-slate-400 mb-4 tracking-wider">壓電源：面對挑剔與善變的對象</p>
+
+                <!-- 動態植物繪圖展示區 -->
+                <div class="w-36 h-36 mx-auto mb-4 bg-slate-950/80 rounded-2xl flex items-center justify-center border border-slate-800/40 relative" id="res-plant-svg-container">
+                    <!-- JS Dynamic SVG insert -->
+                </div>
+
+                <!-- 心理診斷文案 -->
+                <div class="text-left bg-slate-900/60 rounded-xl p-4 border border-slate-800/40 space-y-3">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-500 tracking-wider block mb-0.5">🧠 精神內耗透視</span>
+                        <p id="res-desc" class="text-xs text-slate-300 leading-relaxed">
+                            你最近在工作中像被困在暴雨裡。面對毫無邏輯的修改意見和反覆無常的溝通，你的體內累積了過多代表「焦躁」的紅光。你非常需要能沉澱心神的暗色調，阻絕外界無效的信息干擾。
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-2.5 border-t border-slate-800/80 text-xs">
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-500 tracking-wider block mb-0.5">🧘 療癒植物對策</span>
+                            <span id="res-healing-plant" class="font-bold text-purple-400">天鵝絨深紫非洲紫羅蘭</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-500 tracking-wider block mb-0.5">🌟 桌上花藝守護</span>
+                            <span id="res-healing-power" class="font-bold text-slate-300">吸納負能量 / 沉靜思緒</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 特殊行銷加購卡片 (自動吸水盆) -->
+            <div id="res-marketing-banner" class="rounded-2xl p-4 text-white text-left relative overflow-hidden mb-4 shadow-lg border border-purple-500/30">
+                <div class="absolute inset-0 bg-gradient-to-r from-purple-950 to-indigo-950"></div>
+                <!-- 細砂紋理效果 -->
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_12px]"></div>
+                
+                <div class="relative z-10 flex justify-between items-start">
+                    <div class="space-y-1">
+                        <span class="text-[8px] uppercase font-bold tracking-widest bg-purple-500/40 text-purple-200 px-2 py-0.5 rounded">
+                            限時裂變加購優惠
+                        </span>
+                        <h4 class="text-sm font-black text-white">解鎖：專屬無孔玻璃自動吸水盆</h4>
+                        <p class="text-[10px] text-slate-300 leading-relaxed">解決紫羅蘭葉片忌淋水的養護痛點，水位一眼看清！</p>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <span class="text-xs line-through text-slate-400 block">$80 HKD</span>
+                        <span class="text-sm font-extrabold text-amber-300">$52 HKD (65折)</span>
+                    </div>
+                </div>
+
+                <div class="mt-3 pt-2.5 border-t border-white/10 flex justify-between items-center text-[10px]">
+                    <span class="text-purple-300">⚠️ 截圖結果並上傳至 IG 限時動態 @plantplant 即可兌換</span>
+                    <span class="font-extrabold text-amber-300">自動綁定折扣</span>
+                </div>
+            </div>
+
+            <!-- 行動與社群分享按鈕 -->
+            <div class="space-y-2.5 pb-4">
+                <!-- 專屬折扣碼 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex justify-between items-center">
+                    <div class="text-left">
+                        <span class="text-[9px] font-bold text-slate-500 block tracking-widest">領取紫羅蘭盆栽組折扣碼</span>
+                        <span id="coupon-code" class="text-sm font-black tracking-widest text-purple-400">VIOLET30</span>
+                    </div>
+                    <button id="btn-copy-coupon" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition transform active:scale-95">
+                        複製折扣碼
+                    </button>
+                </div>
+
+                <!-- 雙按鈕：分享與入手 -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btn-share" class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-bold py-3.5 px-4 rounded-xl text-xs transition transform active:scale-95 flex items-center justify-center gap-1.5 shadow-[0_4px_15px_rgba(236,72,153,0.3)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 1 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 1 1-1.64-1.055" />
+                        </svg>
+                        分享 IG 限動截圖
+                    </button>
+                    <button id="btn-buy" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-3.5 px-4 rounded-xl text-xs transition transform active:scale-95 flex items-center justify-center gap-1.5 border border-slate-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-purple-400">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.119-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        選購我的紫羅蘭組
+                    </button>
+                </div>
+                
+                <button id="btn-restart" class="w-full text-center text-[10px] text-slate-500 hover:text-slate-400 transition py-1 tracking-widest uppercase">
+                    重新探測心靈底色 ↺
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= CUSTOM MODAL (NO ALERT) ================= -->
+        <div id="custom-toast" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-slate-900/95 text-white px-5 py-3 rounded-xl text-xs font-medium z-50 shadow-xl opacity-0 translate-y-4 pointer-events-none transition-all duration-300 flex items-center gap-2 border border-purple-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-pink-500">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id="toast-message">成功複製</span>
+        </div>
+
+    </div>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // --- 題目數據 ---
+        const questions = [
+            {
+                id: 1,
+                question: "最近在辦公室，最讓你感到心煩意亂的「高頻雜音」是哪一個？",
+                options: [
+                    { text: "通訊軟體不斷傳來的新訊息「登登」聲，神經一秒緊繃。", element: "red" },
+                    { text: "隔壁部門討論「這個專案沒對齊，要推倒重來」的嘆息聲。", element: "blue" },
+                    { text: "印表機永無止境運作的沙沙聲，覺得自己像機器一樣機械運作。", element: "gray" },
+                    { text: "主管在走廊上踱步、敲桌子，彷彿隨時要爆炸的壓迫感。", element: "yellow" }
+                ]
+            },
+            {
+                id: 2,
+                question: "當你的企劃案被挑剔的客戶反覆退回，而對方給不出明確方向時，你內心的火焰會呈現何種狀態？",
+                options: [
+                    { text: "瞬間爆燃！腦中上演一萬遍「不幹了」的辭職大戲，全靠深呼吸壓抑。", element: "red" },
+                    { text: "火焰瞬間熄滅。開始陷入無止盡的自我懷疑，難道是我能力不夠？", element: "blue" },
+                    { text: "毫無波瀾的死灰。隨便吧，他要怎麼改就怎麼改，我只是個無情的打字機。", element: "gray" },
+                    { text: "焦灼微弱地閃爍。感覺全身力氣被抽空，頭皮發麻，想立刻逃離辦公室。", element: "yellow" }
+                ]
+            },
+            {
+                id: 3,
+                question: "下班後半小時，工作群組突然跳出老闆「@所有人」的信息，你的第一反射動作是？",
+                options: [
+                    { text: "血壓暴衝！一邊在心裡痛罵沒有邊界感，一邊不情願地打開電腦。", element: "red" },
+                    { text: "心跳漏一拍。擔心是不是自己負責的項目出了紕漏，焦慮地立刻查看。", element: "blue" },
+                    { text: "假裝沒看見。調成靜音模式，只要我已讀不回，今晚地裂也與我無關。", element: "gray" },
+                    { text: "嘆一口氣，乖乖回覆「收到」。生活跟工作的邊界早就崩塌，無奈妥協。", element: "yellow" }
+                ]
+            },
+            {
+                id: 4,
+                question: "在連續加班一整週後的週末，你最渴望用什麼方式「排除精神廢物」？",
+                options: [
+                    { text: "重口味美食、爆汗運動、大聲唱KTV，用最直白強烈的刺激發洩掉憤怒。", element: "red" },
+                    { text: "去沒有人的海邊或山林深呼吸，遠離人群，把破碎的自我拼湊起來。", element: "blue" },
+                    { text: "待在家裡一整天，不洗頭不洗臉、關掉手機，像一塊海綿一樣躺平。", element: "gray" },
+                    { text: "做一次全身SPA或精油按摩，徹底放鬆因為緊繃而僵硬僵直的肌肉。", element: "yellow" }
+                ]
+            },
+            {
+                id: 5,
+                question: "如果可以為你的辦公桌引入一個「魔法屏障」，你最希望它幫你抵禦什麼？",
+                options: [
+                    { text: "抵禦挑剔客戶與無腦同事的愚蠢要求，保持工作的純粹高效。", element: "red" },
+                    { text: "抵禦無窮無盡的職場焦慮感與內耗，讓我每天都能平靜準時下班。", element: "blue" },
+                    { text: "抵禦千篇一律、枯燥乏味的工作感，幫我找回一絲最初的創造力。", element: "gray" },
+                    { text: "抵禦永無休止的工作量與不合理排程，留點時間給自己的生活空間。", element: "yellow" }
+                ]
+            }
+        ];
+
+        // --- 人格診斷結果與非洲紫羅蘭配對數據 ---
+        const results = {
+            red: {
+                badge: "內耗色譜：暴躁紅 (Angry Red)",
+                title: "焦躁暴雨中的「防禦屏障」",
+                subtitle: "精神內耗源：挑剔與善變的各方人馬",
+                desc: "你最近在工作中像被困在暴雨裡。面對毫無邏輯的修改意見和反覆無常的溝通，你的體內累積了過多代表「焦躁」的紅光。你非常需要能沉澱心神的暗色調，阻絕外界無效的信息干擾。",
+                healingPlant: "天鵝絨深紫非洲紫羅蘭",
+                healingPower: "吸收周圍干擾 / 安定神經",
+                coupon: "PURPLESHIELD",
+                themeClass: "from-purple-950 to-indigo-950",
+                badgeClass: "bg-red-950 text-red-400 border border-red-800",
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full text-purple-500">
+                        <defs>
+                            <linearGradient id="potGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#3b0764" />
+                                <stop offset="100%" stop-color="#120024" />
+                            </linearGradient>
+                            <linearGradient id="violetP" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#c084fc" />
+                                <stop offset="50%" stop-color="#7e22ce" />
+                                <stop offset="100%" stop-color="#4c1d95" />
+                            </linearGradient>
+                        </defs>
+                        <!-- 高級無孔吸水盆 -->
+                        <rect x="30" y="70" width="40" height="25" rx="8" fill="url(#potGrad)" stroke="#6b21a8" stroke-width="1.5" />
+                        <!-- 玻璃外殼質感 -->
+                        <rect x="27" y="68" width="46" height="28" rx="10" fill="none" stroke="#a855f7" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>
+                        <line x1="33" y1="85" x2="67" y2="85" stroke="#a855f7" stroke-width="1" opacity="0.3"/>
+                        <!-- 植物葉片 -->
+                        <path d="M50,70 C35,68 20,55 35,45 C45,55 50,70 50,70 Z" fill="#064e3b" stroke="#0f766e" />
+                        <path d="M50,70 C65,68 80,55 65,45 C55,55 50,70 50,70 Z" fill="#064e3b" stroke="#0f766e" />
+                        <!-- 紫羅蘭花朵一 -->
+                        <g transform="translate(42, 45) scale(0.75)">
+                            <path d="M0,0 C-12,-15 12,-15 0,0 Z" fill="url(#violetP)" />
+                            <path d="M0,0 C15,-10 15,10 0,0 Z" fill="url(#violetP)" />
+                            <path d="M0,0 C10,15 -10,15 0,0 Z" fill="url(#violetP)" />
+                            <path d="M0,0 C-15,10 -15,-10 0,0 Z" fill="url(#violetP)" />
+                            <circle cx="0" cy="0" r="2.5" fill="#eab308" />
+                        </g>
+                        <!-- 紫羅蘭花朵二 -->
+                        <g transform="translate(56, 42) scale(0.65)">
+                            <path d="M0,0 C-12,-15 12,-15 0,0 Z" fill="url(#violetP)" />
+                            <path d="M0,0 C15,-10 15,10 0,0 Z" fill="url(#violetP)" />
+                            <path d="M0,0 C10,15 -10,15 0,0 Z" fill="url(#violetP)" />
+                            <path d="M0,0 C-15,10 -15,-10 0,0 Z" fill="url(#violetP)" />
+                            <circle cx="0" cy="0" r="2" fill="#eab308" />
+                        </g>
+                      </svg>`
+            },
+            blue: {
+                badge: "內耗色譜：焦慮藍 (Anxious Blue)",
+                title: "失控波濤中的「安全港灣」",
+                subtitle: "精神內耗源：對自我能力的過度苛求",
+                desc: "你像一個過載的雷達，對周圍的每件小事和細節都高度敏感，體內積累了大量「焦慮藍」的波長。你需要溫柔、充滿生機的暖色調來融化這種緊繃感，重新擁抱自己。",
+                healingPlant: "櫻花粉紅非洲紫羅蘭",
+                healingPower: "撫平日常焦慮 / 重拾自我肯定",
+                coupon: "PINKHEALER",
+                themeClass: "from-pink-950 to-rose-950",
+                badgeClass: "bg-blue-950 text-blue-400 border border-blue-800",
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full text-pink-500">
+                        <defs>
+                            <linearGradient id="potGrad2" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#4d0c2c" />
+                                <stop offset="100%" stop-color="#1f0310" />
+                            </linearGradient>
+                            <linearGradient id="violetPink" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#fbcfe8" />
+                                <stop offset="50%" stop-color="#f472b6" />
+                                <stop offset="100%" stop-color="#db2777" />
+                            </linearGradient>
+                        </defs>
+                        <!-- 高級無孔吸水盆 -->
+                        <rect x="30" y="70" width="40" height="25" rx="8" fill="url(#potGrad2)" stroke="#be185d" stroke-width="1.5" />
+                        <rect x="27" y="68" width="46" height="28" rx="10" fill="none" stroke="#f472b6" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>
+                        <line x1="33" y1="85" x2="67" y2="85" stroke="#f472b6" stroke-width="1" opacity="0.3"/>
+                        <!-- 綠葉 -->
+                        <path d="M50,70 C35,68 20,55 35,45 C45,55 50,70 50,70 Z" fill="#14532d" stroke="#15803d" />
+                        <path d="M50,70 C65,68 80,55 65,45 C55,55 50,70 50,70 Z" fill="#14532d" stroke="#15803d" />
+                        <!-- 粉紅紫羅蘭一 -->
+                        <g transform="translate(48, 43) scale(0.8)">
+                            <path d="M0,0 C-12,-15 12,-15 0,0 Z" fill="url(#violetPink)" />
+                            <path d="M0,0 C15,-10 15,10 0,0 Z" fill="url(#violetPink)" />
+                            <path d="M0,0 C10,15 -10,15 0,0 Z" fill="url(#violetPink)" />
+                            <path d="M0,0 C-15,10 -15,-10 0,0 Z" fill="url(#violetPink)" />
+                            <circle cx="0" cy="0" r="2" fill="#ca8a04" />
+                        </g>
+                        <!-- 粉紅紫羅蘭二 -->
+                        <g transform="translate(60, 48) scale(0.6)">
+                            <path d="M0,0 C-12,-15 12,-15 0,0 Z" fill="url(#violetPink)" />
+                            <path d="M0,0 C15,-10 15,10 0,0 Z" fill="url(#violetPink)" />
+                            <path d="M0,0 C10,15 -10,15 0,0 Z" fill="url(#violetPink)" />
+                            <path d="M0,0 C-15,10 -15,-10 0,0 Z" fill="url(#violetPink)" />
+                            <circle cx="0" cy="0" r="1.5" fill="#ca8a04" />
+                        </g>
+                      </svg>`
+            },
+            gray: {
+                badge: "內耗色譜：迷茫灰 (Lost Gray)",
+                title: "日復一日中的「靈感爆發」",
+                subtitle: "精神內耗源：枯燥重複的機械勞作",
+                desc: "你被瑣碎的工作消磨掉了熱情，像一台快要生鏽的機器，大腦頻寬被「迷茫灰」占領。你需要極具神祕感、色彩深邃的幻藍花瓣，帶給你的辦公桌一絲前衛的科幻和靈感。",
+                healingPlant: "星空幻藍非洲紫羅蘭",
+                healingPower: "激活深層創意 / 打破思維定勢",
+                coupon: "BLUESTAR",
+                themeClass: "from-cyan-950 to-blue-950",
+                badgeClass: "bg-slate-800 text-slate-300 border border-slate-700",
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full text-blue-500">
+                        <defs>
+                            <linearGradient id="potGrad3" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#083344" />
+                                <stop offset="100%" stop-color="#02141a" />
+                            </linearGradient>
+                            <linearGradient id="violetBlue" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#60a5fa" />
+                                <stop offset="50%" stop-color="#2563eb" />
+                                <stop offset="100%" stop-color="#1e3a8a" />
+                            </linearGradient>
+                        </defs>
+                        <!-- 高級無孔吸水盆 -->
+                        <rect x="30" y="70" width="40" height="25" rx="8" fill="url(#potGrad3)" stroke="#0891b2" stroke-width="1.5" />
+                        <rect x="27" y="68" width="46" height="28" rx="10" fill="none" stroke="#3b82f6" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>
+                        <line x1="33" y1="85" x2="67" y2="85" stroke="#3b82f6" stroke-width="1" opacity="0.3"/>
+                        <!-- 葉片 -->
+                        <path d="M50,70 C35,68 20,55 35,45 C45,55 50,70 50,70 Z" fill="#0f4c5c" stroke="#115e59" />
+                        <path d="M50,70 C65,68 80,55 65,45 C55,55 50,70 50,70 Z" fill="#0f4c5c" stroke="#115e59" />
+                        <!-- 幻藍紫羅蘭 -->
+                        <g transform="translate(46, 44) scale(0.85)">
+                            <path d="M0,0 C-12,-15 12,-15 0,0 Z" fill="url(#violetBlue)" />
+                            <path d="M0,0 C15,-10 15,10 0,0 Z" fill="url(#violetBlue)" />
+                            <path d="M0,0 C10,15 -10,15 0,0 Z" fill="url(#violetBlue)" />
+                            <path d="M0,0 C-15,10 -15,-10 0,0 Z" fill="url(#violetBlue)" />
+                            <circle cx="0" cy="0" r="2.5" fill="#fbbf24" />
+                            <!-- 亮晶晶小星點 -->
+                            <circle cx="-5" cy="-5" r="0.8" fill="#ffffff" />
+                            <circle cx="6" cy="3" r="0.8" fill="#ffffff" />
+                        </g>
+                      </svg>`
+            },
+            yellow: {
+                badge: "內耗色譜：過載黃 (Overloaded Yellow)",
+                title: "混亂秩序中的「純淨呼吸」",
+                subtitle: "精神內耗源：過載工作與邊界感喪失",
+                desc: "你像一根被拉扯到極限的橡皮筋，工作塞爆了生活，體內頻譜呈現飽和的「過載黃」。你迫切需要純白色與精緻鑲邊的花瓣，幫你過濾大腦雜質，重新畫出生活的清爽邊界。",
+                healingPlant: "鑲邊純白非洲紫羅蘭",
+                healingPower: "排除思緒雜音 / 重建生活與工作邊界",
+                coupon: "WHITEBORDER",
+                themeClass: "from-amber-950 to-slate-900",
+                badgeClass: "bg-amber-950 text-amber-400 border border-amber-800",
+                svg: `<svg viewBox="0 0 100 100" class="w-full h-full text-white">
+                        <defs>
+                            <linearGradient id="potGrad4" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#451a03" />
+                                <stop offset="100%" stop-color="#1c0a00" />
+                            </linearGradient>
+                            <linearGradient id="violetWhite" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#ffffff" />
+                                <stop offset="50%" stop-color="#f8fafc" />
+                                <stop offset="100%" stop-color="#e2e8f0" />
+                            </linearGradient>
+                        </defs>
+                        <!-- 高級無孔吸水盆 -->
+                        <rect x="30" y="70" width="40" height="25" rx="8" fill="url(#potGrad4)" stroke="#b45309" stroke-width="1.5" />
+                        <rect x="27" y="68" width="46" height="28" rx="10" fill="none" stroke="#facc15" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>
+                        <line x1="33" y1="85" x2="67" y2="85" stroke="#facc15" stroke-width="1" opacity="0.3"/>
+                        <!-- 葉片 -->
+                        <path d="M50,70 C35,68 20,55 35,45 C45,55 50,70 50,70 Z" fill="#064e3b" stroke="#047857" />
+                        <path d="M50,70 C65,68 80,55 65,45 C55,55 50,70 50,70 Z" fill="#064e3b" stroke="#047857" />
+                        <!-- 鑲邊純白紫羅蘭一 -->
+                        <g transform="translate(48, 44) scale(0.8)">
+                            <!-- 紫色細邊 -->
+                            <path d="M0,0 C-12,-15 12,-15 0,0 Z" fill="url(#violetWhite)" stroke="#c084fc" stroke-width="1" />
+                            <path d="M0,0 C15,-10 15,10 0,0 Z" fill="url(#violetWhite)" stroke="#c084fc" stroke-width="1" />
+                            <path d="M0,0 C10,15 -10,15 0,0 Z" fill="url(#violetWhite)" stroke="#c084fc" stroke-width="1" />
+                            <path d="M0,0 C-15,10 -15,-10 0,0 Z" fill="url(#violetWhite)" stroke="#c084fc" stroke-width="1" />
+                            <circle cx="0" cy="0" r="2" fill="#ca8a04" />
+                        </g>
+                      </svg>`
+            }
+        };
+
+        // --- 狀態追蹤 ---
+        let currentQuestionIndex = 0;
+        let scores = { red: 0, blue: 0, gray: 0, yellow: 0 };
+        let selectedResultColor = 'red';
+
+        // --- DOM Elements ---
+        const screenWelcome = document.getElementById('screen-welcome');
+        const screenQuiz = document.getElementById('screen-quiz');
+        const screenLoading = document.getElementById('screen-loading');
+        const screenResult = document.getElementById('screen-result');
+
+        const btnStart = document.getElementById('btn-start');
+        const quizQNum = document.getElementById('quiz-q-num');
+        const quizQuestion = document.getElementById('quiz-question');
+        const quizOptions = document.getElementById('quiz-options');
+        const quizProgressText = document.getElementById('quiz-progress-text');
+        const quizProgressPercent = document.getElementById('quiz-progress-percent');
+        const quizProgressBar = document.getElementById('quiz-progress-bar');
+
+        const loadingTitle = document.getElementById('loading-title');
+        const loadingSub = document.getElementById('loading-sub');
+
+        const resColorBadge = document.getElementById('res-color-badge');
+        const resTitle = document.getElementById('res-title');
+        const resSubtitle = document.getElementById('res-subtitle');
+        const resPlantSvgContainer = document.getElementById('res-plant-svg-container');
+        const resDesc = document.getElementById('res-desc');
+        const resHealingPlant = document.getElementById('res-healing-plant');
+        const resHealingPower = document.getElementById('res-healing-power');
+        const resMarketingBanner = document.getElementById('res-marketing-banner');
+        const couponCode = document.getElementById('coupon-code');
+
+        const btnCopyCoupon = document.getElementById('btn-copy-coupon');
+        const btnShare = document.getElementById('btn-share');
+        const btnBuy = document.getElementById('btn-buy');
+        const btnRestart = document.getElementById('btn-restart');
+
+        const customToast = document.getElementById('custom-toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        // --- Event Listeners ---
+        btnStart.addEventListener('click', startQuiz);
+        btnCopyCoupon.addEventListener('click', copyCouponCode);
+        btnShare.addEventListener('click', shareToInstagramStory);
+        btnBuy.addEventListener('click', buyPackage);
+        btnRestart.addEventListener('click', restartQuiz);
+
+        // --- 函數：開始測驗 ---
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            scores = { red: 0, blue: 0, gray: 0, yellow: 0 };
+            
+            screenWelcome.classList.add('hidden');
+            screenQuiz.classList.remove('hidden');
+            
+            showQuestion();
+        }
+
+        // --- 函數：顯示問題 ---
+        function showQuestion() {
+            const q = questions[currentQuestionIndex];
+            
+            // 更新進度條
+            const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
+            quizQNum.innerText = `Q${currentQuestionIndex + 1}.`;
+            quizProgressText.innerText = `EMOTION PROFILE ${currentQuestionIndex + 1} / ${questions.length}`;
+            quizProgressPercent.innerText = `${Math.round(progressPercent)}%`;
+            quizProgressBar.style.width = `${progressPercent}%`;
+
+            // 設置題目
+            quizQuestion.innerText = q.question;
+
+            // 渲染選項
+            quizOptions.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left bg-slate-900 hover:bg-purple-950/30 border border-slate-800 hover:border-purple-500 rounded-2xl p-4 text-xs text-slate-300 transition-all duration-200 transform active:scale-[0.99] flex items-start gap-3 shadow-md";
+                
+                // 序號字母
+                const letter = document.createElement('span');
+                letter.className = "flex items-center justify-center w-5 h-5 rounded-full bg-slate-800 text-purple-400 text-[10px] font-black shrink-0 mt-0.5";
+                letter.innerText = String.fromCharCode(65 + idx);
+
+                const text = document.createElement('span');
+                text.className = "leading-relaxed";
+                text.innerText = opt.text;
+
+                btn.appendChild(letter);
+                btn.appendChild(text);
+
+                // 綁定事件
+                btn.addEventListener('click', () => selectOption(opt.element));
+                quizOptions.appendChild(btn);
+            });
+        }
+
+        // --- 函數：選擇選項 ---
+        function selectOption(element) {
+            scores[element]++;
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                quizOptions.style.opacity = 0;
+                setTimeout(() => {
+                    showQuestion();
+                    quizOptions.style.opacity = 1;
+                }, 150);
+            } else {
+                processAnalysisResult();
+            }
+        }
+
+        // --- 函數：載入中與分析過程 ---
+        function processAnalysisResult() {
+            screenQuiz.classList.add('hidden');
+            screenLoading.classList.remove('hidden');
+
+            const loadingPhases = [
+                { title: "提取精神壓力頻譜...", sub: "分析大腦中殘留的職場干擾因子，配對天鵝絨防護罩顏色" },
+                { title: "測量辦公桌電磁干擾...", sub: "偵測鍵盤雜音與藍光過載度，計算心靈安全光波" },
+                { title: "花瓣色素與氣場校準...", sub: "正在 Plant Plant 溫室培育配對最適花色非洲紫羅蘭" }
+            ];
+
+            let step = 0;
+            const interval = setInterval(() => {
+                step++;
+                if (step < loadingPhases.length) {
+                    loadingTitle.innerText = loadingPhases[step].title;
+                    loadingSub.innerText = loadingPhases[step].sub;
+                }
+            }, 800);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                
+                // 計算最高得分
+                let maxScore = -1;
+                let finalElement = 'red';
+                for (const key in scores) {
+                    if (scores[key] > maxScore) {
+                        maxScore = scores[key];
+                        finalElement = key;
+                    }
+                }
+                
+                selectedResultColor = finalElement;
+                renderResult(finalElement);
+            }, 2400);
+        }
+
+        // --- 函數：渲染結果畫面 ---
+        function renderResult(element) {
+            const data = results[element];
+
+            resColorBadge.innerText = data.badge;
+            resColorBadge.className = `px-3 py-0.5 text-[10px] font-bold tracking-widest rounded-full ${data.badgeClass}`;
+            
+            resTitle.innerText = data.title;
+            resSubtitle.innerText = data.subtitle;
+            resDesc.innerText = data.desc;
+            resHealingPlant.innerText = data.healingPlant;
+            resHealingPower.innerText = data.healingPower;
+            couponCode.innerText = data.coupon;
+
+            resPlantSvgContainer.innerHTML = data.svg;
+
+            // 調整行銷橫幅色調
+            resMarketingBanner.className = `rounded-2xl p-4 text-white text-left relative overflow-hidden mb-4 shadow-lg border border-purple-500/30 bg-gradient-to-r ${data.themeClass}`;
+
+            screenLoading.classList.add('hidden');
+            screenResult.classList.remove('hidden');
+        }
+
+        // --- 輔助：顯示 Toast 提示（無 Alert 友好設計） ---
+        function showToast(message) {
+            toastMessage.innerText = message;
+            customToast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+            customToast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                customToast.classList.remove('opacity-100', 'translate-y-0');
+                customToast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+            }, 2000);
+        }
+
+        // --- 複製優惠碼 ---
+        function copyCouponCode() {
+            const code = couponCode.innerText;
+            const temp = document.createElement('input');
+            temp.value = code;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+
+            showToast("折扣碼已成功複製！✨");
+        }
+
+        // --- 複製 IG 裂變文案 ---
+        function shareToInstagramStory() {
+            const data = results[selectedResultColor];
+            const promoText = `【Plant Plant 職場精神內耗情緒色譜測驗】\n我的心靈底色診斷為：『${data.badge}』！\n我的辦公桌命定守護植物是：${data.healingPlant}🌱\n\n一鍵淨化職場焦慮，輸入專屬折扣碼【${data.coupon}】下單現折 $30，解鎖自動吸水盆 65 折！點此開啟你的測驗 👉 https://plantplant-test.github.io/OMAM/`;
+
+            const temp = document.createElement('textarea');
+            temp.value = promoText;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+
+            showToast("已成功複製分享文案！請進行截圖，並貼到 IG 限時動態 @plantplant 以兌換吸水盆折扣 📸");
+        }
+
+        // --- 模擬選購跳轉 ---
+        function buyPackage() {
+            const data = results[selectedResultColor];
+            showToast(`正在帶您前往 ${data.healingPlant} 精品套組購買頁面... 🛒`);
+        }
+
+        // --- 重新開始 ---
+        function restartQuiz() {
+            screenResult.classList.add('hidden');
+            screenWelcome.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
+
