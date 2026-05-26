@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PLANT PLANT植光小助手 - 植物生長專用測光工具</title>
+    <title>植光助手 - 植物生長專用測光工具</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons for visual flair -->
@@ -131,7 +131,7 @@
                     <!-- We use stroke-dasharray to paint only the green target section -->
                     <!-- Perimeter = 2 * pi * 42 = 263.89 -->
                     <!-- 800/3000 = 26.6% -> stroke-dashoffset = 263.89 * (1 - 0.266) = 193.6 -->
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="263.89" stroke-dashoffset="193.6" class="opacity-20"></circle>
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="#10b981" stroke-width="10" stroke-dasharray="263.89" stroke-dashoffset="193.6" class="opacity-70 pulse-active" style="filter: drop-shadow(0 0 6px rgba(16,185,129,0.8));"></circle>
                     
                     <!-- Dynamic Progress Indicator -->
                     <circle id="gauge-progress" cx="50" cy="50" r="42" fill="none" stroke="#f59e0b" stroke-width="6" stroke-dasharray="263.89" stroke-dashoffset="263.89" stroke-linecap="round" class="transition-all duration-300"></circle>
@@ -145,14 +145,14 @@
             </div>
 
             <!-- Target Range Indicator bar directly below the gauge -->
-            <div class="w-full mt-4 bg-slate-800 rounded-full h-4 relative overflow-hidden z-10 border border-slate-700/50">
+            <div class="w-full mt-4 bg-slate-800 rounded-full h-6 relative overflow-hidden z-10 border border-slate-700/50 shadow-inner">
                 <!-- 800 - 1600 Range Area represented visually (Percentage scale: 0 to 3000 lux) -->
                 <!-- 800 is at 26.6% width, 1600 is at 53.3% width. Span = 26.7% -->
-                <div class="absolute left-[26.6%] w-[26.7%] h-full bg-emerald-500/30 border-l border-r border-emerald-400 flex items-center justify-center">
-                    <span class="text-[9px] text-emerald-300 font-bold scale-90">植物黃金生長區間 (800-1600)</span>
+                <div class="absolute left-[26.6%] w-[26.7%] h-full bg-emerald-500/50 border-x-2 border-emerald-400 flex items-center justify-center pulse-active z-0">
+                    <span class="text-[10px] text-white font-bold whitespace-nowrap drop-shadow-md z-10">黃金區間</span>
                 </div>
                 <!-- Dynamic Pointer -->
-                <div id="slider-pointer" class="absolute left-0 top-0 w-2.5 h-full bg-white border border-slate-900 rounded-sm shadow transition-all duration-300" style="transform: translateX(-50%);"></div>
+                <div id="slider-pointer" class="absolute left-0 top-0 w-3 h-full bg-white border-2 border-slate-900 rounded shadow-[0_0_5px_rgba(0,0,0,0.5)] transition-all duration-300 z-20" style="transform: translateX(-50%);"></div>
             </div>
 
             <!-- Plant Suitability Status Message Card -->
@@ -220,6 +220,23 @@
 
             <div id="history-list" class="space-y-2 max-h-48 overflow-y-auto hidden">
                 <!-- Saved items injected here via JS -->
+            </div>
+        </div>
+
+        <!-- Plant Plant 0.1 - User Counter -->
+        <div class="bg-gradient-to-r from-emerald-900/40 to-slate-800/40 border border-emerald-500/20 rounded-2xl p-4 flex items-center justify-between shadow-lg">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-500/20 text-emerald-400 p-2.5 rounded-xl">
+                    <i class="fa-solid fa-users-viewfinder text-lg"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-200">plant plant 0.1</h4>
+                    <p class="text-[10px] text-slate-400 mt-0.5">全球使用人數紀錄</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <div class="text-2xl font-black text-emerald-400 font-mono tracking-wider" id="user-count-display">7,000</div>
+                <div class="text-[9px] text-emerald-500/60 font-semibold uppercase tracking-widest mt-0.5">Active Users</div>
             </div>
         </div>
 
@@ -607,7 +624,45 @@
             renderHistory();
             showToast('歷史數據已全數清除');
         });
+
+        // Plant Plant 0.1 User Counter Logic
+        function initUserCounter() {
+            const countDisplay = document.getElementById('user-count-display');
+            // Base starting number (7000)
+            const baseCount = 7000;
+            
+            // Generate a realistic target count based on the current date
+            const today = new Date();
+            const daysSinceBase = Math.max(0, Math.floor((today - new Date(today.getFullYear(), 0, 1)) / (1000 * 60 * 60 * 24)));
+            const targetCount = baseCount + (daysSinceBase * 8) + Math.floor(Math.random() * 45);
+
+            // Animate counting up from 7000 to the target
+            let currentCount = baseCount;
+            const duration = 1500; // 1.5 seconds animation
+            const intervalTime = 30;
+            const steps = duration / intervalTime;
+            const increment = (targetCount - baseCount) / steps;
+
+            const counterInterval = setInterval(() => {
+                currentCount += increment;
+                if (currentCount >= targetCount) {
+                    currentCount = targetCount;
+                    clearInterval(counterInterval);
+                    
+                    // Simulate occasional active users increasing slowly
+                    setInterval(() => {
+                        if(Math.random() > 0.6) {
+                            currentCount += Math.floor(Math.random() * 2) + 1;
+                            countDisplay.textContent = Math.floor(currentCount).toLocaleString();
+                        }
+                    }, 6000);
+                }
+                countDisplay.textContent = Math.floor(currentCount).toLocaleString();
+            }, intervalTime);
+        }
+
+        // Initialize the counter when the script loads
+        initUserCounter();
     </script>
 </body>
 </html>
-
