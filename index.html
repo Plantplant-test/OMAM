@@ -21,6 +21,15 @@
         .pulse-active {
             animation: pulse-soft 2s infinite ease-in-out;
         }
+        
+        /* Custom glowing pulse specifically for the SVG arc to avoid layout shifts */
+        @keyframes glow-pulse {
+            0%, 100% { filter: drop-shadow(0 0 3px rgba(16,185,129,0.6)); }
+            50% { filter: drop-shadow(0 0 12px rgba(16,185,129,1)); }
+        }
+        .glow-active {
+            animation: glow-pulse 2s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
@@ -47,7 +56,7 @@
     <main class="flex-1 max-w-md w-full mx-auto p-4 space-y-4 pb-24">
 
         <!-- Info Dialog Modal (Initially Hidden) -->
-        <div id="info-modal" class="hidden bg-slate-800/95 border border-slate-700 rounded-2xl p-4 text-sm space-y-3 shadow-xl transition-all">
+        <div id="info-modal" class="hidden bg-slate-800/95 border border-slate-700 rounded-2xl p-4 text-sm space-y-3 shadow-xl transition-all z-50 relative">
             <div class="flex justify-between items-center border-b border-slate-700 pb-2">
                 <h3 class="font-bold text-emerald-400 flex items-center gap-1">
                     <i class="fa-solid fa-book-open"></i> 植物照度對照指南
@@ -59,15 +68,15 @@
             <p class="text-slate-300">光照強度（Lux）是影響植物光合作用與生長健康的關鍵：</p>
             <ul class="space-y-2 text-xs text-slate-400">
                 <li class="flex items-start gap-2">
-                    <span class="inline-block px-1.5 py-0.5 bg-amber-500/10 text-amber-500 rounded font-semibold mt-0.5">&lt; 800 Lux</span>
+                    <span class="inline-block px-1.5 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded font-semibold mt-0.5">&lt; 800 Lux</span>
                     <span><strong>光照偏低：</strong> 適合耐陰植物（如虎尾蘭、萬年青、網紋草）。多數觀葉植物長期在此環境下容易徒長、褪色。</span>
                 </li>
                 <li class="flex items-start gap-2">
-                    <span class="inline-block px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded font-semibold mt-0.5">800 - 1600 Lux</span>
+                    <span class="inline-block px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded font-semibold mt-0.5">800 - 1600 Lux</span>
                     <span><strong>植物黃金生長區間：</strong> 最適合多數室內植物（如龜背芋、琴葉榕、黃金葛、蕨類）。在此照度下植物能進行穩定且健康的慢速光合作用。</span>
                 </li>
                 <li class="flex items-start gap-2">
-                    <span class="inline-block px-1.5 py-0.5 bg-cyan-500/10 text-cyan-400 rounded font-semibold mt-0.5">&gt; 1600 Lux</span>
+                    <span class="inline-block px-1.5 py-0.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded font-semibold mt-0.5">&gt; 1600 Lux</span>
                     <span><strong>明亮偏強：</strong> 適合中高光照植物（如多肉植物、仙人掌、部分開花植物）。若是一般喜陰觀葉植物，請注意避免日光直射暴曬以防葉片燒傷。</span>
                 </li>
             </ul>
@@ -115,50 +124,51 @@
             </div>
         </div>
 
-        <!-- Real-time Lux Gauge & Display Card -->
+        <!-- Real-time Semi-Circle Dial Gauge Card -->
         <div class="bg-slate-800/30 border border-slate-800 rounded-3xl p-6 flex flex-col items-center relative overflow-hidden">
-            <!-- Background Decorative Ambient Glow (Changes color based on lux) -->
-            <div id="glow-indicator" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-amber-500/5 blur-3xl transition-all duration-500"></div>
+            <!-- Background Decorative Ambient Glow -->
+            <div id="glow-indicator" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-blue-500/5 blur-3xl transition-all duration-500"></div>
 
-            <span class="text-xs uppercase font-semibold text-slate-500 tracking-widest mb-2 z-10">當前環境估算照度</span>
+            <span class="text-xs uppercase font-semibold text-slate-500 tracking-widest mb-6 z-10">當前環境估算照度</span>
             
-            <!-- Radial SVG Gauge -->
-            <div class="relative w-56 h-56 flex items-center justify-center z-10">
-                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                    <!-- Outer Background Track -->
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="#1e293b" stroke-width="6" stroke-linecap="round"></circle>
-                    <!-- Plant Target Zone Highlight Ring (800 - 1600 Lux out of 3000 max, roughly 26% to 53% of the arc) -->
-                    <!-- We use stroke-dasharray to paint only the green target section -->
-                    <!-- Perimeter = 2 * pi * 42 = 263.89 -->
-                    <!-- 800/3000 = 26.6% -> stroke-dashoffset = 263.89 * (1 - 0.266) = 193.6 -->
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="#10b981" stroke-width="10" stroke-dasharray="263.89" stroke-dashoffset="193.6" class="opacity-70 pulse-active" style="filter: drop-shadow(0 0 6px rgba(16,185,129,0.8));"></circle>
+            <!-- SVG Semi-Circle Dial Gauge -->
+            <div class="relative w-full max-w-[16rem] aspect-[2/1] z-10 mt-2">
+                <svg class="w-full h-full overflow-visible" viewBox="0 0 200 105">
+                    <!-- Gauge Tracks Group -->
+                    <g transform="translate(100, 100) rotate(-180)">
+                        <!-- Outer Background Track -->
+                        <circle cx="0" cy="0" r="80" fill="none" stroke="#1e293b" stroke-width="24" stroke-dasharray="251.32 500"></circle>
+                        
+                        <!-- Zone 1: Low / Blue (0 - 800 Lux) -->
+                        <circle cx="0" cy="0" r="80" fill="none" stroke="#3b82f6" stroke-width="20" stroke-dasharray="67.02 500" stroke-dashoffset="0"></circle>
+                        
+                        <!-- Zone 2: Optimal / Green (800 - 1600 Lux) -->
+                        <circle id="zone-optimal" cx="0" cy="0" r="80" fill="none" stroke="#10b981" stroke-width="22" stroke-dasharray="67.02 500" stroke-dashoffset="-67.02" class="transition-all duration-300"></circle>
+                        
+                        <!-- Zone 3: High / Red (1600 - 3000 Lux) -->
+                        <circle cx="0" cy="0" r="80" fill="none" stroke="#ef4444" stroke-width="20" stroke-dasharray="117.28 500" stroke-dashoffset="-134.04"></circle>
+                    </g>
                     
-                    <!-- Dynamic Progress Indicator -->
-                    <circle id="gauge-progress" cx="50" cy="50" r="42" fill="none" stroke="#f59e0b" stroke-width="6" stroke-dasharray="263.89" stroke-dashoffset="263.89" stroke-linecap="round" class="transition-all duration-300"></circle>
+                    <!-- Dynamic Needle Pointer -->
+                    <g id="gauge-needle" class="transition-transform duration-500 ease-out" style="transform-origin: 100px 100px; transform: rotate(-90deg);">
+                        <!-- Needle body -->
+                        <path d="M 96 105 L 104 105 L 100 15 Z" fill="#1e293b" stroke="#f8fafc" stroke-width="1.5"></path>
+                        <!-- Needle Center Pivot -->
+                        <circle cx="100" cy="100" r="10" fill="#1e293b" stroke="#f8fafc" stroke-width="2.5"></circle>
+                    </g>
                 </svg>
-                
-                <!-- Center Numeric Text -->
-                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                    <span id="lux-value" class="text-5xl font-black tracking-tight text-white transition-all">0</span>
-                    <span class="text-sm font-semibold text-slate-400 mt-1">LUX</span>
-                </div>
             </div>
 
-            <!-- Target Range Indicator bar directly below the gauge -->
-            <div class="w-full mt-4 bg-slate-800 rounded-full h-6 relative overflow-hidden z-10 border border-slate-700/50 shadow-inner">
-                <!-- 800 - 1600 Range Area represented visually (Percentage scale: 0 to 3000 lux) -->
-                <!-- 800 is at 26.6% width, 1600 is at 53.3% width. Span = 26.7% -->
-                <div class="absolute left-[26.6%] w-[26.7%] h-full bg-emerald-500/50 border-x-2 border-emerald-400 flex items-center justify-center pulse-active z-0">
-                    <span class="text-[10px] text-white font-bold whitespace-nowrap drop-shadow-md z-10">黃金區間</span>
-                </div>
-                <!-- Dynamic Pointer -->
-                <div id="slider-pointer" class="absolute left-0 top-0 w-3 h-full bg-white border-2 border-slate-900 rounded shadow-[0_0_5px_rgba(0,0,0,0.5)] transition-all duration-300 z-20" style="transform: translateX(-50%);"></div>
+            <!-- Center Numeric Text (Placed directly below the gauge) -->
+            <div class="text-center mt-2 z-10">
+                <span id="lux-value" class="text-5xl font-black tracking-tight text-white transition-all">0</span>
+                <span class="text-sm font-semibold text-slate-400 ml-1">LUX</span>
             </div>
 
             <!-- Plant Suitability Status Message Card -->
             <div id="status-card" class="w-full mt-6 p-4 rounded-2xl bg-slate-800/80 border border-slate-700 text-center transition-all z-10">
                 <div class="flex items-center justify-center gap-2 mb-1">
-                    <span id="status-icon" class="text-amber-500"><i class="fa-solid fa-circle-info"></i></span>
+                    <span id="status-icon" class="text-slate-400"><i class="fa-solid fa-circle-question"></i></span>
                     <h3 id="status-title" class="font-bold text-sm text-slate-200">相機尚未啟動</h3>
                 </div>
                 <p id="status-desc" class="text-xs text-slate-400">請允許並啟用相機，開始進行光照強度的即時偵測。</p>
@@ -255,7 +265,7 @@
                 <span class="text-slate-300">植物推薦照度範圍：</span>
                 <span class="font-bold text-emerald-400 px-1.5 py-0.5 bg-emerald-500/10 rounded">800 - 1600 Lux</span>
             </div>
-            <span class="text-slate-500 text-[10px]">v1.2.0</span>
+            <span class="text-slate-500 text-[10px]">v1.3.0</span>
         </div>
     </footer>
 
@@ -285,9 +295,9 @@
         const btnSave = document.getElementById('btn-save');
         
         const luxValueDisp = document.getElementById('lux-value');
-        const gaugeProgress = document.getElementById('gauge-progress');
-        const sliderPointer = document.getElementById('slider-pointer');
+        const gaugeNeedle = document.getElementById('gauge-needle'); // Updated reference for Needle
         const glowIndicator = document.getElementById('glow-indicator');
+        const zoneOptimal = document.getElementById('zone-optimal'); // Reference for the green zone arc
         
         const statusCard = document.getElementById('status-card');
         const statusIcon = document.getElementById('status-icon');
@@ -321,7 +331,7 @@
         let previewHidden = false;
         let historyRecords = [];
 
-        // Max scale for mapping Lux to Gauge (Let's design a realistic spectrum of 0 to 3000 Lux)
+        // Max scale for mapping Lux to Gauge (Scale is 0 to 3000 Lux)
         const MAX_LUX_SCALE = 3000;
 
         // Custom Toast system to avoid alerts
@@ -459,16 +469,12 @@
                     metricLuminance.innerHTML = `${currentLuminanceRaw} <span class="text-xs font-normal text-slate-500">/ 255</span>`;
 
                     // Mathematical modeling for Lux estimation
-                    // Standard mobile cameras adjust exposure dynamically. To provide responsive scale:
-                    // Max standard indoor lux mapped to around 1500, extreme bright light source scale up.
-                    // Utilizing a smooth exponential curve to represent true light dynamic range better.
                     const normalizedLuminance = averageLuminance / 255;
                     const luxCurve = Math.pow(normalizedLuminance, 1.8);
                     
                     // Base potential max of 3000 Lux multiplied by custom user calibration index
                     let estimatedLux = Math.round(luxCurve * MAX_LUX_SCALE * calibrationMultiplier);
                     
-                    // Clamp to realistic positive range
                     if (estimatedLux < 0) estimatedLux = 0;
                     
                     currentLuxValue = estimatedLux;
@@ -489,30 +495,20 @@
             // Update Text
             luxValueDisp.textContent = lux.toLocaleString();
 
-            // Update Circle Progress
-            // Circle perimeter (r=42) = ~263.89
-            const strokeDashOffsetVal = 263.89 - (Math.min(lux, MAX_LUX_SCALE) / MAX_LUX_SCALE) * 263.89;
-            gaugeProgress.style.strokeDashoffset = strokeDashOffsetVal;
+            // Calculate Needle Angle (-90deg is full left/0 Lux, +90deg is full right/3000 Lux)
+            const clampedLux = Math.min(lux, MAX_LUX_SCALE);
+            const needleAngle = (clampedLux / MAX_LUX_SCALE) * 180 - 90;
+            gaugeNeedle.style.transform = `rotate(${needleAngle}deg)`;
 
-            // Change Stroke color based on light status
-            if (lux < 800) {
-                gaugeProgress.setAttribute('stroke', '#f59e0b'); // Amber
-            } else if (lux >= 800 && lux <= 1600) {
-                gaugeProgress.setAttribute('stroke', '#10b981'); // Emerald (Healthy)
-            } else {
-                gaugeProgress.setAttribute('stroke', '#06b6d4'); // Cyan (Bright)
-            }
+            // Adjust Ambient glow intensity & color based on Blue / Green / Red zones, and toggle pulse
+            let glowColor = "rgba(59, 130, 246, 0.05)"; // Blue (Low)
+            zoneOptimal.classList.remove('glow-active'); // Ensure pulse is off by default
 
-            // Update Bottom Pointer slider (percentage range 0 to MAX_LUX_SCALE)
-            const percentagePos = Math.min((lux / MAX_LUX_SCALE) * 100, 100);
-            sliderPointer.style.left = `${percentagePos}%`;
-
-            // Adjust Ambient glow intensity & color
-            let glowColor = "rgba(245, 158, 11, 0.05)"; // Amber (Low)
             if (lux >= 800 && lux <= 1600) {
                 glowColor = "rgba(16, 185, 129, 0.12)"; // Green (Optimal)
+                zoneOptimal.classList.add('glow-active'); // Trigger pulse for optimal zone
             } else if (lux > 1600) {
-                glowColor = "rgba(6, 182, 212, 0.08)"; // Cyan (High)
+                glowColor = "rgba(239, 68, 68, 0.08)"; // Red (High)
             }
             glowIndicator.style.backgroundColor = glowColor;
 
@@ -524,23 +520,23 @@
                 statusTitle.className = "font-bold text-sm text-slate-300";
                 statusDesc.textContent = "請對準光源，或嘗試在明亮環境下測試前置鏡頭。";
             } else if (lux < 800) {
-                statusCard.className = "w-full mt-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-center transition-all z-10";
-                statusIcon.innerHTML = `<i class="fa-solid fa-circle-exclamation text-amber-500 text-base"></i>`;
+                statusCard.className = "w-full mt-6 p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-center transition-all z-10";
+                statusIcon.innerHTML = `<i class="fa-solid fa-droplet text-blue-400 text-base"></i>`;
                 statusTitle.textContent = "光照偏弱 (耐陰區間)";
-                statusTitle.className = "font-bold text-sm text-amber-400";
-                statusDesc.innerHTML = `當前為 <strong>${lux} Lux</strong>。低於植物黃金生長區間。適合放置<span class="underline decoration-amber-500/50">虎尾蘭、萬年青或網紋草</span>等耐陰植物，一般觀葉植物長期在此環境下可能容易徒長。`;
+                statusTitle.className = "font-bold text-sm text-blue-400";
+                statusDesc.innerHTML = `當前為 <strong>${lux} Lux</strong>。低於植物黃金生長區間。適合放置<span class="underline decoration-blue-500/50">虎尾蘭、萬年青或網紋草</span>等耐陰植物，一般觀葉植物長期在此環境下可能容易徒長。`;
             } else if (lux >= 800 && lux <= 1600) {
                 statusCard.className = "w-full mt-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center transition-all z-10 pulse-active";
-                statusIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>`;
-                statusTitle.textContent = "光照完美 (符合植物黃金區間)";
+                statusIcon.innerHTML = `<i class="fa-solid fa-seedling text-emerald-400 text-base"></i>`;
+                statusTitle.textContent = "植物黃金生長區間";
                 statusTitle.className = "font-bold text-sm text-emerald-400";
-                statusDesc.innerHTML = `當前為 <strong>${lux} Lux</strong>。完美符合植物黃金生長標準！極其適合室內觀葉植物：<span class="underline decoration-emerald-400/50">龜背芋、琴葉榕、黃金葛、竹芋與各類蕨類</span>。`;
+                statusDesc.innerHTML = `當前為 <strong>${lux} Lux</strong>。完美符合植物黃金生長標準！極度適合栽培<span class="underline decoration-emerald-400/50">龜背芋、琴葉榕、黃金葛</span>等受歡迎的室內觀葉植物。`;
             } else {
-                statusCard.className = "w-full mt-6 p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-center transition-all z-10";
-                statusIcon.innerHTML = `<i class="fa-solid fa-sun text-cyan-400 text-base"></i>`;
+                statusCard.className = "w-full mt-6 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-center transition-all z-10";
+                statusIcon.innerHTML = `<i class="fa-solid fa-fire text-red-400 text-base"></i>`;
                 statusTitle.textContent = "光照明亮 (中高光照區間)";
-                statusTitle.className = "font-bold text-sm text-cyan-400";
-                statusDesc.innerHTML = `當前為 <strong>${lux} Lux</strong>。照度充沛！適合放置<span class="underline decoration-cyan-400/50">多肉植物、香草、仙人掌</span>等喜光植物。若是普通耐陰室內植物，請注意不要被午後烈日直接暴曬。`;
+                statusTitle.className = "font-bold text-sm text-red-400";
+                statusDesc.innerHTML = `當前為 <strong>${lux} Lux</strong>。照度充沛！適合放置<span class="underline decoration-red-400/50">多肉植物、香草、仙人掌</span>等喜光植物。若是普通耐陰室內植物，請注意不要被午後烈日直接暴曬。`;
             }
         }
 
@@ -554,18 +550,18 @@
             const timestamp = new Date();
             const timeString = `${timestamp.getHours().toString().padStart(2, '0')}:${timestamp.getMinutes().toString().padStart(2, '0')}:${timestamp.getSeconds().toString().padStart(2, '0')}`;
             
-            // Analyze current light status tag
+            // Analyze current light status tag (Blue, Green, Red theme)
             let statusText = "";
             let statusColorClass = "";
             if (currentLuxValue < 800) {
                 statusText = "偏弱 (耐陰)";
-                statusColorClass = "bg-amber-500/10 text-amber-500 border border-amber-500/20";
+                statusColorClass = "bg-blue-500/10 text-blue-400 border border-blue-500/20";
             } else if (currentLuxValue >= 800 && currentLuxValue <= 1600) {
                 statusText = "完美 (黃金)";
                 statusColorClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
             } else {
                 statusText = "充足 (強光)";
-                statusColorClass = "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20";
+                statusColorClass = "bg-red-500/10 text-red-400 border border-red-500/20";
             }
 
             const record = {
